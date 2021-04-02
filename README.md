@@ -9,6 +9,8 @@ As process can be very long, it was funny to use jobrunr (default accessible at 
 
 A basic postman collection is available in helpers folder.
 
+Also, it's a mess to produce needed jar so you can find dependencies attached. But following this procedure should be ok tweaking pom a bit... https://github.com/ProgrammeVitam/sedatools/blob/master/README.en.md
+
 TODO list is huge if you want to go far
 * Documentation. As it's currently very basic, I didn't go that far...
 * Architecture and package are not very well separated
