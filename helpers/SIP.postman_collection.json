@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "eb5c1fc0-d355-4554-be26-9b2821c488c4",
+		"name": "SIP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SIP - Launch Async Archive Job",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"agencies\": [\"FRAN_NP_000001\", \"FRAN_NP_000010\", \"FRAN_NP_000015\", \"FRAN_NP_000019\"],\r\n    \"archivalAgreement\": \"IC-000001\",\r\n    \"archiveUnitID\": \"Racine\",\r\n    \"descriptionLevel\": \"Subseries\",\r\n    \"title\":\"Procédure Cerfa-1244771\",\r\n    \"description\": \"Procédure Cerfa-1244771 - DEMANDE D'AUTORISATION DE DETENTION DE GRENOUILLES CYBORG (Arrêté du 30 février 2104 fixant les règles générales de fonctionnement des installations d’élevage d’agrément d’animaux cyborg)\",\r\n    \"folderPath\": \"c:/tmp/Procedure\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sip/launchAsync",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sip",
+						"launchAsync"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SIP - Poll for Job status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sip/status/2b509e2b-dac2-4b88-8a8f-14f93d2bcc0f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sip",
+						"status",
+						"2b509e2b-dac2-4b88-8a8f-14f93d2bcc0f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SIP - Download From Job ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sip/download/2b509e2b-dac2-4b88-8a8f-14f93d2bcc0f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sip",
+						"download",
+						"2b509e2b-dac2-4b88-8a8f-14f93d2bcc0f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SIP - Launch Sync Archive Job",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"agencies\": [\"FRAN_NP_000001\", \"FRAN_NP_000010\", \"FRAN_NP_000015\", \"FRAN_NP_000019\"],\r\n    \"archivalAgreement\": \"IC-000001\",\r\n    \"archiveUnitID\": \"Racine\",\r\n    \"descriptionLevel\": \"Subseries\",\r\n    \"title\":\"Procédure Cerfa-1244771\",\r\n    \"description\": \"Procédure Cerfa-1244771 - DEMANDE D'AUTORISATION DE DETENTION DE GRENOUILLES CYBORG (Arrêté du 30 février 2104 fixant les règles générales de fonctionnement des installations d’élevage d’agrément d’animaux cyborg)\",\r\n    \"folderPath\": \"c:/tmp/Procedure\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/sip/launchSync",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sip",
+						"launchSync"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
