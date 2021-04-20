@@ -11,6 +11,12 @@ A basic postman collection is available in helpers folder.
 
 Also, it's a mess to produce needed jar so you can find dependencies attached. But following this procedure should be ok tweaking pom a bit... https://github.com/ProgrammeVitam/sedatools/blob/master/README.en.md
 
+Add them all as libraries (in Intellij), and add sedalib in your Maven repository:
+
+```
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=dependencies/sedalib-2.5.0-SNAPSHOT.jar
+```
+
 TODO list is huge if you want to go far
 * Documentation. As it's currently very basic, I didn't go that far...
 * Architecture and package are not very well separated
