@@ -53,7 +53,7 @@ public class SipController {
      * @return SIP Zip archive file
      * @throws IOException
      */
-    @PostMapping("/launchSync")
+    @PostMapping("/generate-sync")
     public @ResponseBody byte[] launchJobSync(@RequestBody SipDefinition sip, HttpServletResponse response) throws IOException {
         UUID jobId = jobScheduler.enqueue(() -> sipService.createSip(sip, JobContext.Null)).asUUID();
         Job jobById = storageProvider.getJobById(jobId);
@@ -77,7 +77,7 @@ public class SipController {
      * @return a job id (to pool request for job status)
      * @throws IOException
      */
-    @PostMapping("/launchAsync")
+    @PostMapping("/generate-async")
     public String launchJobAsync(@RequestBody SipDefinition sip) throws IOException {
         JobId jobId = jobScheduler.enqueue(() -> sipService.createSip(sip, JobContext.Null));
         return jobId.asUUID().toString();

@@ -20,7 +20,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/sip/launchAsync",
+					"raw": "http://localhost:8080/sip/generate-async",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -28,7 +28,7 @@
 					"port": "8080",
 					"path": [
 						"sip",
-						"launchAsync"
+						"generate-async"
 					]
 				}
 			},
@@ -91,7 +91,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/sip/launchSync",
+					"raw": "http://localhost:8080/sip/generate-sync",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -99,7 +99,7 @@
 					"port": "8080",
 					"path": [
 						"sip",
-						"launchSync"
+						"generate-sync"
 					]
 				}
 			},
