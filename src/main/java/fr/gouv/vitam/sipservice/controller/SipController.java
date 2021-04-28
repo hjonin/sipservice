@@ -1,14 +1,8 @@
 package fr.gouv.vitam.sipservice.controller;
 
-import static org.apache.commons.lang3.StringUtils.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
+import fr.gouv.vitam.sipservice.SipConfiguration;
+import fr.gouv.vitam.sipservice.dto.SipData;
+import fr.gouv.vitam.sipservice.service.SipService;
 import org.jobrunr.jobs.Job;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.context.JobContext;
@@ -22,9 +16,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import fr.gouv.vitam.sipservice.SipConfiguration;
-import fr.gouv.vitam.sipservice.dto.SipDefinition;
-import fr.gouv.vitam.sipservice.service.SipService;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.UUID;
+
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @RestController
 @RequestMapping("/sip")
@@ -47,46 +45,58 @@ public class SipController {
     /**
      * Launches a job in background and wait for job to end.
      * Processing is Sync.
-     * 
-     * @param sip
+     *
+     * @param sipData
      * @param response
      * @return SIP Zip archive file
      * @throws IOException
      */
     @PostMapping("/generate-sync")
-    public @ResponseBody byte[] launchJobSync(@RequestBody SipDefinition sip, HttpServletResponse response) throws IOException {
-        UUID jobId = jobScheduler.enqueue(() -> sipService.createSip(sip, JobContext.Null)).asUUID();
-        Job jobById = storageProvider.getJobById(jobId);
-        StateName jobState = jobById.getState();
-        while (!StateName.SUCCEEDED.equals(jobState)) {
-            try {
+    public @ResponseBody
+    byte[] launchJobSync(@RequestBody SipData sipData, HttpServletResponse response) throws IOException {
+        UUID jobId = jobScheduler.enqueue(() -> sipService.createSip(sipData, JobContext.Null)).asUUID();
+        try {
+            do {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                log.error("Thread sleep failed", e);
-            }
-            jobState = storageProvider.getJobById(jobId).getJobState().getName();
+            } while (jobIsNotDone(jobId));
+        } catch (InterruptedException e) {
+            log.error("Error while executing sample job", e);
+            Thread.currentThread().interrupt();
+        }
+        if (jobHasFailed(jobId)) {
+            return sendError(response);
         }
         return getArchiveFileBytes(response, jobId.toString());
+    }
+
+    private boolean jobIsNotDone(UUID jobId) {
+        Job job = storageProvider.getJobById(jobId);
+        return job.hasState(StateName.ENQUEUED) || job.hasState(StateName.PROCESSING);
+    }
+
+    private boolean jobHasFailed(UUID jobId) {
+        Job job = storageProvider.getJobById(jobId);
+        return job.hasState(StateName.FAILED);
     }
 
     /**
      * Launches a job in background and returns job id.
      * Processing is Async.
-     * 
-     * @param sip SIP archive metadata
+     *
+     * @param sipData SIP archive metadata
      * @return a job id (to pool request for job status)
      * @throws IOException
      */
     @PostMapping("/generate-async")
-    public String launchJobAsync(@RequestBody SipDefinition sip) throws IOException {
-        JobId jobId = jobScheduler.enqueue(() -> sipService.createSip(sip, JobContext.Null));
+    public String launchJobAsync(@RequestBody SipData sipData) throws IOException {
+        JobId jobId = jobScheduler.enqueue(() -> sipService.createSip(sipData, JobContext.Null));
         return jobId.asUUID().toString();
     }
 
     /**
      * Polling request to get job status.
-     * 
-     * @param jobId 
+     *
+     * @param jobId
      * @return status of the job
      * @throws IOException
      */
@@ -98,14 +108,15 @@ public class SipController {
 
     /**
      * To call once polling gives SUCCEEDED status.
-     * 
+     *
      * @param jobId
      * @param response
      * @return SIP Zip archive file
      * @throws IOException
      */
     @GetMapping("/download/{jobId}")
-    public @ResponseBody byte[] downloadArchive(@PathVariable String jobId, HttpServletResponse response) throws IOException {
+    public @ResponseBody
+    byte[] downloadArchive(@PathVariable String jobId, HttpServletResponse response) throws IOException {
         return getArchiveFileBytes(response, jobId);
     }
 
@@ -121,4 +132,9 @@ public class SipController {
         return "attachment; filename=\"" + file.getName() + "\"";
     }
 
+    private byte[] sendError(HttpServletResponse response) {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return new byte[0];
+    }
 }

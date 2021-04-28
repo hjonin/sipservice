@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "eb5c1fc0-d355-4554-be26-9b2821c488c4",
+		"_postman_id": "3daa6eb3-926c-44f8-8eab-5bf170c9748a",
 		"name": "SIP",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"agencies\": [\"FRAN_NP_000001\", \"FRAN_NP_000010\", \"FRAN_NP_000015\", \"FRAN_NP_000019\"],\r\n    \"archivalAgreement\": \"IC-000001\",\r\n    \"archiveUnitID\": \"Racine\",\r\n    \"descriptionLevel\": \"Subseries\",\r\n    \"title\":\"Procédure Cerfa-1244771\",\r\n    \"description\": \"Procédure Cerfa-1244771 - DEMANDE D'AUTORISATION DE DETENTION DE GRENOUILLES CYBORG (Arrêté du 30 février 2104 fixant les règles générales de fonctionnement des installations d’élevage d’agrément d’animaux cyborg)\",\r\n    \"folderPath\": \"c:/tmp/Procedure\"\r\n}",
+					"raw": "{\r\n    \"comment\": \"\",\r\n    \"messageIdentifier\": \"\",\r\n    \"archivalAgreement\": \"IC-000001\",\r\n    \"archivalAgency\": \"FRAN_NP_000001\",\r\n    \"transferringAgency\": \"FRAN_NP_000010\",\r\n    \"originatingAgency\": \"FRAN_NP_000015\",\r\n    \"submissionAgency\": \"FRAN_NP_000019\",\r\n    \"archiveUnitDataList\": [\r\n        {\r\n            \"archiveUnitID\": \"Racine\",\r\n            \"descriptionLevel\": \"RecordGrp\",\r\n            \"title\": \"Procédure Cerfa-1244771\",\r\n            \"description\": \"Procédure Cerfa-1244771 - DEMANDE D'AUTORISATION DE DETENTION DE GRENOUILLES CYBORG (Arrêté du 30 février 2104 fixant les règles générales de fonctionnement des installations d’élevage d’agrément d’animaux cyborg)\",\r\n            \"path\": \"/home/helene/Downloads/tmp/Procedure\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -83,7 +83,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"agencies\": [\"FRAN_NP_000001\", \"FRAN_NP_000010\", \"FRAN_NP_000015\", \"FRAN_NP_000019\"],\r\n    \"archivalAgreement\": \"IC-000001\",\r\n    \"archiveUnitID\": \"Racine\",\r\n    \"descriptionLevel\": \"Subseries\",\r\n    \"title\":\"Procédure Cerfa-1244771\",\r\n    \"description\": \"Procédure Cerfa-1244771 - DEMANDE D'AUTORISATION DE DETENTION DE GRENOUILLES CYBORG (Arrêté du 30 février 2104 fixant les règles générales de fonctionnement des installations d’élevage d’agrément d’animaux cyborg)\",\r\n    \"folderPath\": \"c:/tmp/Procedure\"\r\n}",
+					"raw": "{\r\n    \"comment\": \"\",\r\n    \"messageIdentifier\": \"\",\r\n    \"archivalAgreement\": \"IC-000001\",\r\n    \"archivalAgency\": \"FRAN_NP_000001\",\r\n    \"transferringAgency\": \"FRAN_NP_000010\",\r\n    \"originatingAgency\": \"FRAN_NP_000015\",\r\n    \"submissionAgency\": \"FRAN_NP_000019\",\r\n    \"archiveUnitDataList\": [\r\n        {\r\n            \"archiveUnitID\": \"Racine\",\r\n            \"descriptionLevel\": \"RecordGrp\",\r\n            \"title\": \"Procédure Cerfa-1244771\",\r\n            \"description\": \"Procédure Cerfa-1244771 - DEMANDE D'AUTORISATION DE DETENTION DE GRENOUILLES CYBORG (Arrêté du 30 février 2104 fixant les règles générales de fonctionnement des installations d’élevage d’agrément d’animaux cyborg)\",\r\n            \"path\": \"/home/helene/Downloads/tmp/Procedure\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -3,8 +3,8 @@ package fr.gouv.vitam.sipservice.service;
 import static org.apache.commons.lang3.StringUtils.*;
 
 import java.io.File;
-import java.util.List;
 
+import fr.gouv.vitam.sipservice.dto.ArchiveUnitData;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobDashboardProgressBar;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.gouv.vitam.sipservice.SipConfiguration;
-import fr.gouv.vitam.sipservice.dto.SipDefinition;
+import fr.gouv.vitam.sipservice.dto.SipData;
 import fr.gouv.vitam.tools.sedalib.inout.SIPBuilder;
 import fr.gouv.vitam.tools.sedalib.utils.SEDALibException;
 import fr.gouv.vitam.tools.sedalib.utils.SEDALibProgressLogger;
@@ -34,12 +34,12 @@ public class SipService {
      * This method is based on the sample example provided in seda lib fr.gouv.vitam.tools.sedalibsamples.Sample1.
      * It's a very basic example to enrich.
      * 
-     * @param sip basic fields to create an archive
+     * @param sipData basic fields to create an archive
      * @param context jobruner job context
      * @return a generated SI archive file
      */
-    @Job(name = "SIP archive creation")
-    public File createSip(SipDefinition sip, JobContext context) {
+    @Job(name = "SIP archive creation", retries = 1)
+    public File createSip(SipData sipData, JobContext context) {
         JobDashboardProgressBar progressBar = context.progressBar(5);
         String jobId = context.getJobId().toString();
         String shortId = substringBefore(jobId, "-");
@@ -48,16 +48,22 @@ public class SipService {
         final String filename = sipConfiguration.getDestinationFolder().toPath()
                 .resolve(shortId + ".zip").toFile().getAbsolutePath();
         try (SIPBuilder sb = new SIPBuilder(filename, progressLogger)) {
-            final String archiveUnitID = sip.getArchiveUnitID();
-            final List<String> agencies = sip.getAgencies();
-            sb.setAgencies(agencies.get(0), agencies.get(1), agencies.get(2), agencies.get(3));
+            sb.setComment(sipData.getComment());
             progressBar.increaseByOne();
-            sb.setArchivalAgreement(sip.getArchivalAgreement());
+            sb.setMessageIdentifier(sipData.getMessageIdentifier());
             progressBar.increaseByOne();
-            sb.createRootArchiveUnit(archiveUnitID, sip.getDescriptionLevel(), sip.getTitle(), sip.getDescription());
+            sb.setAgencies(sipData.getArchivalAgency(), sipData.getTransferringAgency(), sipData.getOriginatingAgency(), sipData.getSubmissionAgency());
             progressBar.increaseByOne();
-            sb.addDiskSubTree(archiveUnitID, sip.getFolderPath());
+            sb.setArchivalAgreement(sipData.getArchivalAgreement());
             progressBar.increaseByOne();
+            for (ArchiveUnitData archiveUnitData: sipData.getArchiveUnitDataList()) {
+                if (archiveUnitData.getPath() == null) {
+                    sb.createRootArchiveUnit(archiveUnitData.getArchiveUnitID(), archiveUnitData.getDescriptionLevel(), archiveUnitData.getTitle(), archiveUnitData.getDescription());
+                } else {
+                    sb.addDiskSubTree(archiveUnitData.getArchiveUnitID(), archiveUnitData.getPath());
+                }
+                progressBar.increaseByOne();
+            }
             sb.generateSIP();
             progressBar.increaseByOne();
         } catch (SEDALibException e) {
