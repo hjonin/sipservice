@@ -56,13 +56,15 @@ public class SipService {
             progressBar.increaseByOne();
             sb.setArchivalAgreement(sipData.getArchivalAgreement());
             progressBar.increaseByOne();
-            for (ArchiveUnitData archiveUnitData: sipData.getArchiveUnitDataList()) {
-                if (archiveUnitData.getPath() == null) {
-                    sb.createRootArchiveUnit(archiveUnitData.getArchiveUnitID(), archiveUnitData.getDescriptionLevel(), archiveUnitData.getTitle(), archiveUnitData.getDescription());
-                } else {
-                    sb.addDiskSubTree(archiveUnitData.getArchiveUnitID(), archiveUnitData.getPath());
+            if (sipData.getArchiveUnitDataList() != null) {
+                for (ArchiveUnitData archiveUnitData : sipData.getArchiveUnitDataList()) {
+                    if (archiveUnitData.getPath() == null) {
+                        sb.createRootArchiveUnit(archiveUnitData.getArchiveUnitID(), archiveUnitData.getDescriptionLevel(), archiveUnitData.getTitle(), archiveUnitData.getDescription());
+                    } else {
+                        sb.addDiskSubTree(archiveUnitData.getArchiveUnitID(), archiveUnitData.getPath());
+                    }
+                    progressBar.increaseByOne();
                 }
-                progressBar.increaseByOne();
             }
             sb.generateSIP();
             progressBar.increaseByOne();
